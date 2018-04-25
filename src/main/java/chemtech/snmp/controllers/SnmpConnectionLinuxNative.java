@@ -2,10 +2,7 @@ package chemtech.snmp.controllers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-
 import chemtech.snmp.models.SnmpConfigModel;
-import chemtech.snmp.models.SnmpOidModel;
 
 public class SnmpConnectionLinuxNative implements SnmpConnectionController {
 
