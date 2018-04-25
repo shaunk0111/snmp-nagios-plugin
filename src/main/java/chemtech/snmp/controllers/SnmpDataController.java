@@ -10,10 +10,10 @@ import chemtech.snmp.models.SnmpOidModel;
 
 public class SnmpDataController {
 	
-	private SnmpConnectionContoller connectionController;
+	private SnmpConnectionController connectionController;
 	private LinkedList<SnmpOidModel> dataList = new LinkedList<SnmpOidModel>();
 			
-	public SnmpDataController(SnmpConnectionContoller connectionController) {
+	public SnmpDataController(SnmpConnectionController connectionController) {
 		this.connectionController = connectionController;
 	}
 	
@@ -103,14 +103,14 @@ public class SnmpDataController {
 		
 		// Get value
 		String value = getValueBySymbol(symbol);
-		double currentValue = Integer.parseInt(value);
+		double currentValue = Double.parseDouble(value);
 				
 		// Get limits
 		List<String> alimits = Arrays.asList(limits.split(","));
-        double lowerLimitCritical = Integer.parseInt(alimits.get(0));
-        double lowerLimitWarning = Integer.parseInt(alimits.get(1));
-        double upperLimitWarning = Integer.parseInt(alimits.get(2));
-        double upperLimitCritical = Integer.parseInt(alimits.get(3));
+        double lowerLimitCritical = Double.parseDouble(alimits.get(0));
+        double lowerLimitWarning = Double.parseDouble(alimits.get(1));
+        double upperLimitWarning = Double.parseDouble(alimits.get(2));
+        double upperLimitCritical = Double.parseDouble(alimits.get(3));
         
 		// Check status
 		if ((currentValue < lowerLimitCritical) || (currentValue > upperLimitCritical))

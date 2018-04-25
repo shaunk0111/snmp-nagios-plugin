@@ -7,10 +7,10 @@ import chemtech.snmp.models.SnmpConsoleOutputModel;
 
 public class SnmpConsoleController {
 	
-	private SnmpConnectionContoller connectionController;
+	private SnmpConnectionController connectionController;
 	private SnmpDataController dataController;
 	
-	public SnmpConsoleController(SnmpConnectionContoller connectionController, 
+	public SnmpConsoleController(SnmpConnectionController connectionController, 
 			SnmpDataController dataController) {
 		
 		this.connectionController = connectionController;
@@ -31,31 +31,31 @@ public class SnmpConsoleController {
 			    case 0:  {
 			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
 			    			"System OK", dataController.getData()));
-					connectionController.closeConnection();
+							//connectionController.closeConnection();
 			        System.exit(0); // Service status OK
 			    }   
 			    case 1:  {
 			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
 			    			"System Warning", dataController.getData()));
-					connectionController.closeConnection();
+							//connectionController.closeConnection();
 			        System.exit(1); // Service status Warning
 			    }   
 			    case 2: {
 			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
 			    			"System Critical", dataController.getData()));
-					connectionController.closeConnection();
+							//connectionController.closeConnection();
 			        System.exit(2); // Service status Critical
 			    }
 			    case 3: {
 			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
 			    			"System Unknown", dataController.getData()));
-					connectionController.closeConnection();
+							//connectionController.closeConnection();
 			        System.exit(3); // Service status Unknown
 			    }
 			    default: {
 			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
 			    			"System Unknown", dataController.getData()));
-					connectionController.closeConnection();
+							//connectionController.closeConnection();
 			        System.exit(3); // Service status Unknown
 			    	}
 			}

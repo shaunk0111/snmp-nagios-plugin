@@ -9,6 +9,8 @@ import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.TransportMapping;
 import org.snmp4j.event.ResponseEvent;
+import org.snmp4j.security.SecurityLevel;
+import org.snmp4j.security.SecurityModel;
 import org.snmp4j.smi.Integer32;
 import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
@@ -19,7 +21,7 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 import chemtech.snmp.models.SnmpConfigModel;
 import chemtech.snmp.models.SnmpOidModel;
 
-public class SnmpConnectionContoller {
+public class SnmpConnectionJava implements SnmpConnectionController {
 	
 	SnmpConfigModel config;
 	Snmp snmp;
@@ -31,7 +33,7 @@ public class SnmpConnectionContoller {
 	 * Build SNMP Controller with assigned configuration
 	 * @param config
 	 */
-	public SnmpConnectionContoller(SnmpConfigModel config) {
+	public SnmpConnectionJava(SnmpConfigModel config) {
 		this.config = config;
 	}
 	
@@ -49,6 +51,8 @@ public class SnmpConnectionContoller {
 	    comtarget.setAddress(new UdpAddress(config.getIP() + "/" + config.getPort()));
 	    comtarget.setRetries(2);
 	    comtarget.setTimeout(1000);
+	    comtarget.setSecurityLevel(SecurityLevel.NOAUTH_NOPRIV);
+	    comtarget.setSecurityModel(SecurityModel.SECURITY_MODEL_SNMPv2c);
 	    snmp = new Snmp(transport);
 	}
 	
@@ -66,7 +70,8 @@ public class SnmpConnectionContoller {
 	 * @return
 	 * @throws Exception
 	 */
-	private String getResponse(String oid) throws Exception {
+	@Override
+	public String getResponse(String oid) throws Exception {
 			    
 	    int errorStatus = 0;
         String errorStatusText = null;
@@ -98,31 +103,6 @@ public class SnmpConnectionContoller {
 	    // Agent response timed out  
 	    } else 
 	    	throw new Exception("Error: Response Timed Out");	    
-	}
-	
-	/**
-	 * Push SNMP responses into SnmpOidModel list
-	 * @param oidList
-	 * @return
-	 * @throws Exception
-	 */
-	public void pushData(LinkedList<SnmpOidModel> oidList) throws Exception {
-		
-		Iterator<SnmpOidModel> Iterator = oidList.iterator();
-        while (Iterator.hasNext()) {
-        	SnmpOidModel oid = Iterator.next();
-        	oid.setValue(getResponse(oid.getOid()));
-        }
-	}
-	
-	/**
-	 * Push SNMP response into SnmpOidModel
-	 * @param oid
-	 * @return
-	 * @throws Exception
-	 */
-	public void pushValue(SnmpOidModel oid) throws Exception {
-        oid.setValue(getResponse(oid.getOid()));
 	}
 
 }
