@@ -21,7 +21,7 @@ public class SnmpConsoleController {
 	}
 	
 	
-	public void printOutputandExit(String system) {
+	public void printOutputandExit() {
 		
 		String alarms = "";
 		
@@ -34,7 +34,6 @@ public class SnmpConsoleController {
         	if (oid.getState() > 0) {
         		alarms = alarms + " - " + oid.getName() + " = " + oid.getValue() + oid.getType();
         	}
-        	
         }
         
         int maxState = Collections.max(states); // Find highest state

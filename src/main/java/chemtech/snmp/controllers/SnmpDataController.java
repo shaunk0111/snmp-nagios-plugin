@@ -154,8 +154,6 @@ public class SnmpDataController {
         		oid.setState(getStatusByLimits(oid.getValue(),limits));
         	}
         }
-        // Symbol not found
-        throw new Exception("Error: Symbol not found");
 	}
 	
 	/**
