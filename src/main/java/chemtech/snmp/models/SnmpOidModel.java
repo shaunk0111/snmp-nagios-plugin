@@ -12,6 +12,7 @@ public class SnmpOidModel {
 	private double upperLimitCritical;
 	private String value;
 	private boolean prefdata;
+	private int state;
 	
 	public SnmpOidModel(String oid, String name, String type, String symbol) {
 		
@@ -132,6 +133,7 @@ public class SnmpOidModel {
 	public void getPrefdataStatus(boolean prefdata) {
 		this.prefdata = prefdata;
 	}
+	
 	/**
 	 * Value
 	 * @return
@@ -145,6 +147,21 @@ public class SnmpOidModel {
 	 */
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	/**
+	 * State
+	 * @return
+	 */
+	public int getState() {
+		return state;
+	}
+
+	/**
+	 * Set state
+	 */
+	public void setState(int state) {
+		this.state = state;
 	}
 	
 }

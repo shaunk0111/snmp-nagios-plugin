@@ -11,11 +11,10 @@ public final class SnmpConsoleOutputModel {
 	 * @param prefdata
 	 * @return
 	 */
-	static public String SelectPrefData(String message, 
-			LinkedList<SnmpOidModel> prefdata) {
+	static public String SelectPrefData(LinkedList<SnmpOidModel> prefdata) {
 		
 		// Build output String
-		String output = message + " |";
+		String output = " |";
 		Iterator<SnmpOidModel> Iterator = prefdata.iterator();
         while (Iterator.hasNext()) {
         	SnmpOidModel oid = Iterator.next();
@@ -31,11 +30,10 @@ public final class SnmpConsoleOutputModel {
 	 * @param prefdata
 	 * @return
 	 */
-	static public String AllPrefData(String message, 
-			LinkedList<SnmpOidModel> prefdata) {
+	static public String AllPrefData(LinkedList<SnmpOidModel> prefdata) {
 		
 		// Build output String
-		String output = message + " |";
+		String output = " |";
 		Iterator<SnmpOidModel> Iterator = prefdata.iterator();
         while (Iterator.hasNext()) {
         	SnmpOidModel oid = Iterator.next();
@@ -55,6 +53,20 @@ public final class SnmpConsoleOutputModel {
 		String output = message;
 		
 		return output;
+	}
+	
+	public static String getStatusString(String systemName, int status) {
+		
+		if (status == 0)
+			return systemName + " OK";
+		else if (status == 1)
+			return systemName + " WARNING";
+		else if (status == 2)
+			return systemName + " CRITICAL";
+		else if (status == 3)
+			return systemName + " UNKNOWN";
+		else
+			return systemName + " UNKNOWN";
 	}
 
 }

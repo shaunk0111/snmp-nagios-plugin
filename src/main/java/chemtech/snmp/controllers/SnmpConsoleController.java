@@ -1,64 +1,52 @@
 package chemtech.snmp.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import chemtech.snmp.models.SnmpConsoleOutputModel;
+import chemtech.snmp.models.SnmpOidModel;
 
 public class SnmpConsoleController {
 	
-	private SnmpConnectionController connectionController;
 	private SnmpDataController dataController;
+	private String systemName;
 	
 	public SnmpConsoleController(SnmpConnectionController connectionController, 
-			SnmpDataController dataController) {
-		
-		this.connectionController = connectionController;
+			SnmpDataController dataController, String systemName) {
+
 		this.dataController = dataController;
+		this.systemName = systemName;
 	}
 	
 	
-	public void printOutputandExit(List<Integer> states) {
+	public void printOutputandExit(String system) {
 		
-		// Find highest state
-		int maxState = Collections.max(states);
+		String alarms = "";
 		
+		Iterator<SnmpOidModel> Iterator = dataController.getData().iterator();
+		List<Integer> states = new ArrayList<Integer>();
+        while (Iterator.hasNext()) {
+        	SnmpOidModel oid = Iterator.next();
+        	states.add(oid.getState());
+        	
+        	if (oid.getState() > 0) {
+        		alarms = alarms + " - " + oid.getName() + " = " + oid.getValue() + oid.getType();
+        	}
+        	
+        }
+        
+        int maxState = Collections.max(states); // Find highest state
+        		
 		try {
 			
-			// Print console and exit
-			switch (maxState) {
+			System.out.println(SnmpConsoleOutputModel.getStatusString(systemName,maxState) +
+					alarms +
+					SnmpConsoleOutputModel.AllPrefData(dataController.getData()));
 			
-			    case 0:  {
-			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
-			    			"System OK", dataController.getData()));
-							//connectionController.closeConnection();
-			        System.exit(0); // Service status OK
-			    }   
-			    case 1:  {
-			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
-			    			"System Warning", dataController.getData()));
-							//connectionController.closeConnection();
-			        System.exit(1); // Service status Warning
-			    }   
-			    case 2: {
-			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
-			    			"System Critical", dataController.getData()));
-							//connectionController.closeConnection();
-			        System.exit(2); // Service status Critical
-			    }
-			    case 3: {
-			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
-			    			"System Unknown", dataController.getData()));
-							//connectionController.closeConnection();
-			        System.exit(3); // Service status Unknown
-			    }
-			    default: {
-			    	System.out.println(SnmpConsoleOutputModel.AllPrefData(
-			    			"System Unknown", dataController.getData()));
-							//connectionController.closeConnection();
-			        System.exit(3); // Service status Unknown
-			    	}
-			}
+			System.exit(maxState); // Service status OK
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -38,10 +38,7 @@ public class SnmpDataController {
 	 * @return
 	 * @throws Exception
 	 */
-	public int getStatusByStrings(String symbol, String limits) throws Exception {
-		
-		// Get value
-		String value = getValueBySymbol(symbol);
+	public int getStatusByStrings(String value, String limits) throws Exception {
 		
 		// Get limits
 		List<String> listLimits = Arrays.asList(limits.split(","));
@@ -72,7 +69,7 @@ public class SnmpDataController {
 	}
 
 	/**
-	 * 
+	 * Returns values
 	 * @param symbol
 	 * @return value
 	 * @throws Exception
@@ -93,16 +90,35 @@ public class SnmpDataController {
 	}
 	
 	/**
+	 * Retruns state
+	 * @param symbol
+	 * @return value
+	 * @throws Exception
+	 */
+	public int getStateBySymbol(String symbol) throws Exception {
+		
+		Iterator<SnmpOidModel> Iterator = dataList.iterator();
+		SnmpOidModel oid;
+		
+        while (Iterator.hasNext()) {
+        	oid = Iterator.next();
+        	if (oid.getSymbol().equals(symbol)) {
+        		return oid.getState();
+        	}
+        }
+        // Symbol not found
+        throw new Exception("Error: Symbol not found");
+	}
+	
+	/**
 	 * Status of value by limits
 	 * @param symbol
 	 * @param limits
 	 * @return OK 0, Warning 1, Critical 2, Unknown 3
 	 * @throws Exception
 	 */
-	public int getStatusByLimits(String symbol, String limits) throws Exception {
+	public int getStatusByLimits(String value, String limits) throws Exception {
 		
-		// Get value
-		String value = getValueBySymbol(symbol);
 		double currentValue = Double.parseDouble(value);
 				
 		// Get limits
@@ -119,6 +135,27 @@ public class SnmpDataController {
 			return 1;
 		else
 			return 0;	
+	}
+	
+	/**
+	 * Push state into value
+	 * @param oid
+	 * @param limits
+	 * @throws Exception
+	 */
+	public void pushState(String symbol, String limits) throws Exception {
+		
+		Iterator<SnmpOidModel> Iterator = dataList.iterator();
+		SnmpOidModel oid;
+		
+        while (Iterator.hasNext()) {
+        	oid = Iterator.next();
+        	if (oid.getSymbol().equals(symbol)) {
+        		oid.setState(getStatusByLimits(oid.getValue(),limits));
+        	}
+        }
+        // Symbol not found
+        throw new Exception("Error: Symbol not found");
 	}
 	
 	/**
